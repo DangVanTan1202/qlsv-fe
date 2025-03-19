@@ -80,11 +80,25 @@
       "LoaiTk_Id": 3
     },
     {
-      "id": "3239",
-      "tenTaiKhoan": "dfdf",
-      "matKhau": "dfdf",
-      "hoTen": "fdfd",
+      "id": 4,
+      "tenTaiKhoan": "sinhvien2",
+      "matKhau": "sv456",
+      "hoTen": "Ngô Hoàng C",
       "LoaiTk_Id": 3
+    },
+    {
+      "id": 5,
+      "tenTaiKhoan": "giangvien2",
+      "matKhau": "gv456",
+      "hoTen": "Lê Văn B",
+      "LoaiTk_Id": 2
+    },
+    {
+      "id": 6,
+      "tenTaiKhoan": "giangvien3",
+      "matKhau": "gv789",
+      "hoTen": "Phạm Thị C",
+      "LoaiTk_Id": 2
     }
   ],
   "LoaiTk": [
@@ -102,22 +116,6 @@
       "id": 3,
       "ten": "Sinh viên",
       "code": "sinhvien"
-    }
-  ],
-  "DiemSo": [
-    {
-      "id": 1,
-      "idSinhVien": 1,
-      "idMonHoc": 1,
-      "diem": 8.5,
-      "idGiangVien": 1
-    },
-    {
-      "id": 2,
-      "idSinhVien": 2,
-      "idMonHoc": 2,
-      "diem": 7,
-      "idGiangVien": 2
     }
   ],
   "Role": [

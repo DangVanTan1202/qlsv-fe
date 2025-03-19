@@ -113,146 +113,70 @@ export default function StudentManagement() {
   };
 
   return (
-         <div className="flex min-h-screen bg-gray-100 text-gray-800">
-               <Sidebar user={user} />
-               <div className="flex-1 p-6">
-                 <Header user={user} onLogout={handleLogout}/>
-        <div className="p-6">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-white to-white text-slate-800">
+    <div className="flex flex-1">
+      <Sidebar user={user} className="h-auto min-h-full" />
+      <main className="flex-1 p-10 flex flex-col">
+        <Header user={user} onLogout={handleLogout} />
+        <section className="mt-10 flex flex-col relative">
+          <h1 className="text-3xl font-extrabold text-orange-500 text-left mb-6">Quản Lý Sinh Viên</h1>
           <button
-            className="bg-green-500 text-white px-4 py-2 mb-4"
-            onClick={() =>
-              setNewStudent({
-                maSinhVien: "",
-                ngaySinh: "",
-                idLopHoc: "",
-                user_id: availableUsers.length > 0 ? availableUsers[0].id : "", // Set giá trị mặc định
-              })
-            }
+            className="bg-pink-600 text-white px-5 py-3 rounded mb-6 w-fit"
+            onClick={() => setNewStudent({ maSinhVien: "", ngaySinh: "", idLopHoc: "", user_id: availableUsers.length > 0 ? availableUsers[0].id : "" })}
           >
             + Thêm Sinh Viên
           </button>
-
-          <table className="min-w-full bg-white border border-gray-200">
-            <thead>
+          <table className="w-full bg-amber-50 shadow-md rounded-lg overflow-hidden">
+            <thead className="bg-stone-400">
               <tr>
-                <th className="border px-4 py-2">Mã Sinh Viên</th>
-                <th className="border px-4 py-2">Ngày Sinh</th>
-                <th className="border px-4 py-2">Lớp Học</th>
-                <th className="border px-4 py-2">Tài Khoản</th>
-                <th className="border px-4 py-2">Hành động</th>
+                <th className="p-4 text-left">Mã Sinh Viên</th>
+                <th className="p-4 text-left">Ngày Sinh</th>
+                <th className="p-4 text-left">Lớp Học</th>
+                <th className="p-4 text-left">Tài Khoản</th>
+                <th className="p-4 text-left">Hành động</th>
               </tr>
             </thead>
             <tbody>
               {students.map((student) => (
-                <tr key={student.id} className="border">
-                  <td className="border px-4 py-2">{student.maSinhVien}</td>
-                  <td className="border px-4 py-2">{student.ngaySinh}</td>
-                  <td className="border px-4 py-2">
-                    {classes.find((c) => c.id === student.idLopHoc)?.tenLop ||
-                      "Chưa có"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    {users.find((u) => u.id === student.user_id)?.hoTen ||
-                      "Chưa có"}
-                  </td>
-                  <td className="border px-4 py-2">
-                    <button
-                      className="bg-blue-500 text-white px-3 py-1 mr-2"
-                      onClick={() => handleEdit(student)}
-                    >
-                      Chỉnh sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-3 py-1"
-                      onClick={() => handleDelete(student.id)}
-                    >
-                      Xóa
-                    </button>
+                <tr key={student.id} className="border-t">
+                  <td className="p-4">{student.maSinhVien}</td>
+                  <td className="p-4">{student.ngaySinh}</td>
+                  <td className="p-4">{classes.find((c) => c.id === student.idLopHoc)?.tenLop || "Chưa có"}</td>
+                  <td className="p-4">{users.find((u) => u.id === student.user_id)?.hoTen || "Chưa có"}</td>
+                  <td className="p-4 flex gap-2">
+                    <button className="bg-cyan-400 text-white px-3 py-1 rounded" onClick={() => handleEdit(student)}>Sửa</button>
+                    <button className="bg-orange-500 text-white px-3 py-1 rounded" onClick={() => handleDelete(student.id)}>Xóa</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-      {(editingStudent || newStudent) && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded">
-            <h2 className="text-lg font-bold">
-              {editingStudent ? "Chỉnh sửa" : "Thêm mới"}
-            </h2>
-            <label>Mã Sinh Viên:</label>
-            <input
-              type="text"
-              className="border p-2 w-full"
-              value={editingStudent?.maSinhVien || newStudent?.maSinhVien}
-              onChange={(e) => {
-                const value = e.target.value;
-                editingStudent
-                  ? setEditingStudent({ ...editingStudent, maSinhVien: value })
-                  : setNewStudent({ ...newStudent, maSinhVien: value });
-              }}
-            />
-            <label>Ngày Sinh:</label>
-            <input
-              type="date"
-              className="border p-2 w-full"
-              value={editingStudent?.ngaySinh || newStudent?.ngaySinh}
-              onChange={(e) => {
-                const value = e.target.value;
-                editingStudent
-                  ? setEditingStudent({ ...editingStudent, ngaySinh: value })
-                  : setNewStudent({ ...newStudent, ngaySinh: value });
-              }}
-            />
-            <label>Lớp Học:</label>
-            <select
-              className="border p-2 w-full"
-              value={editingStudent?.idLopHoc || newStudent?.idLopHoc}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                editingStudent
-                  ? setEditingStudent({ ...editingStudent, idLopHoc: value })
-                  : setNewStudent({ ...newStudent, idLopHoc: value });
-              }}
-            >
-              <option value="">-- Chọn lớp --</option>
-              {classes.map((cls) => (
-                <option key={cls.id} value={cls.id}>
-                  {cls.tenLop}
-                </option>
-              ))}
-            </select>
-            <label>Tài Khoản:</label>
-            <select
-              className="border p-2 w-full"
-              value={editingStudent?.user_id ?? newStudent?.user_id ?? ""}
-              onChange={(e) => {
-                const value = e.target.value ? e.target.value : "";
-                if (editingStudent) {
-                  setEditingStudent({ ...editingStudent, user_id: value });
-                } else {
-                  setNewStudent({ ...newStudent, user_id: value });
-                }
-              }}
-            >
-              <option value="">-- Chọn tài khoản --</option>
-              {availableUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.hoTen}
-                </option>
-              ))}
-            </select>
-
-            <button
-              className="bg-green-500 text-white px-4 py-2 mt-4"
-              onClick={handleSave}
-            >
-              Lưu
-            </button>
-          </div>
-        </div>
-      )}
+          {(editingStudent || newStudent) && (
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-white p-10 rounded-lg shadow-xl w-96 border border-gray-300">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-700">{editingStudent ? "Chỉnh sửa Sinh Viên" : "Thêm mới Sinh Viên"}</h2>
+                <button className="text-red-600 text-4xl font-bold hover:text-red-800" onClick={() => { setEditingStudent(null); setNewStudent(null); }}>×</button>
+              </div>
+              <label className="block text-gray-600 font-semibold">Mã Sinh Viên:</label>
+              <input type="text" className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.maSinhVien || newStudent?.maSinhVien} onChange={(e) => { const value = e.target.value; editingStudent ? setEditingStudent({ ...editingStudent, maSinhVien: value }) : setNewStudent({ ...newStudent, maSinhVien: value }); }} />
+              <label className="block text-gray-600 font-semibold">Ngày Sinh:</label>
+              <input type="date" className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.ngaySinh || newStudent?.ngaySinh} onChange={(e) => { const value = e.target.value; editingStudent ? setEditingStudent({ ...editingStudent, ngaySinh: value }) : setNewStudent({ ...newStudent, ngaySinh: value }); }} />
+              <label className="block text-gray-600 font-semibold">Lớp Học:</label>
+              <select className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.idLopHoc || newStudent?.idLopHoc} onChange={(e) => { const value = Number(e.target.value); editingStudent ? setEditingStudent({ ...editingStudent, idLopHoc: value }) : setNewStudent({ ...newStudent, idLopHoc: value }); }}>
+                <option value="">-- Chọn lớp --</option>
+                {classes.map((cls) => (<option key={cls.id} value={cls.id}>{cls.tenLop}</option>))}
+              </select>
+              <label className="block text-gray-600 font-semibold">Tài Khoản:</label>
+              <select className="border p-2 w-full mb-6 rounded shadow-sm" value={editingStudent?.user_id ?? newStudent?.user_id ?? ""} onChange={(e) => { const value = e.target.value ? e.target.value : ""; editingStudent ? setEditingStudent({ ...editingStudent, user_id: value }) : setNewStudent({ ...newStudent, user_id: value }); }}>
+                <option value="">-- Chọn tài khoản --</option>
+                {availableUsers.map((user) => (<option key={user.id} value={user.id}>{user.hoTen}</option>))}
+              </select>
+              <button className="bg-rose-500 text-white px-6 py-3 w-full rounded-lg font-semibold shadow-md hover:bg-rose-600 transition"  onClick={handleSave}  >Lưu</button>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
+  </div>
   );
 }
