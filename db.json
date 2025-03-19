@@ -1,0 +1,181 @@
+{
+  "SinhVien": [
+    {
+      "id": 1,
+      "maSinhVien": "SV001",
+      "ngaySinh": "2001-05-21",
+      "idLopHoc": 1,
+      "user_id": 3
+    },
+    {
+      "id": 2,
+      "maSinhVien": "SV002",
+      "ngaySinh": "2002-09-15",
+      "idLopHoc": 2,
+      "user_id": 4
+    }
+  ],
+  "LopHoc": [
+    {
+      "id": 1,
+      "tenLop": "CNTT-K16",
+      "maLopHoc": "L001"
+    },
+    {
+      "id": 2,
+      "tenLop": "KTPM-K15",
+      "maLopHoc": "L002"
+    }
+  ],
+  "MonHoc": [
+    {
+      "id": 1,
+      "maMonHoc": "MH001",
+      "tenMonHoc": "Lập trình Java",
+      "idGiangVien": 1,
+      "idLopHoc": 1
+    },
+    {
+      "id": 2,
+      "maMonHoc": "MH002",
+      "tenMonHoc": "Cấu trúc dữ liệu",
+      "idGiangVien": 2,
+      "idLopHoc": 2
+    }
+  ],
+  "GiangVien": [
+    {
+      "id": 1,
+      "maGiangVien": "GV001",
+      "ngaySinh": "1980-02-14",
+      "user_id": 5
+    },
+    {
+      "id": 2,
+      "maGiangVien": "GV002",
+      "ngaySinh": "1975-07-30",
+      "user_id": 6
+    }
+  ],
+  "User": [
+    {
+      "id": 1,
+      "tenTaiKhoan": "admin",
+      "matKhau": "admin123",
+      "hoTen": "Quản trị viên",
+      "LoaiTk_Id": 1
+    },
+    {
+      "id": 2,
+      "tenTaiKhoan": "giangvien1",
+      "matKhau": "gv123",
+      "hoTen": "Nguyễn Văn A",
+      "LoaiTk_Id": 2
+    },
+    {
+      "id": 3,
+      "tenTaiKhoan": "sinhvien1",
+      "matKhau": "sv123",
+      "hoTen": "Trần Minh B",
+      "LoaiTk_Id": 3
+    },
+    {
+      "id": "3239",
+      "tenTaiKhoan": "dfdf",
+      "matKhau": "dfdf",
+      "hoTen": "fdfd",
+      "LoaiTk_Id": 3
+    }
+  ],
+  "LoaiTk": [
+    {
+      "id": 1,
+      "ten": "Admin",
+      "code": "admin"
+    },
+    {
+      "id": 2,
+      "ten": "Giảng viên",
+      "code": "giangvien"
+    },
+    {
+      "id": 3,
+      "ten": "Sinh viên",
+      "code": "sinhvien"
+    }
+  ],
+  "DiemSo": [
+    {
+      "id": 1,
+      "idSinhVien": 1,
+      "idMonHoc": 1,
+      "diem": 8.5,
+      "idGiangVien": 1
+    },
+    {
+      "id": 2,
+      "idSinhVien": 2,
+      "idMonHoc": 2,
+      "diem": 7,
+      "idGiangVien": 2
+    }
+  ],
+  "Role": [
+    {
+      "id": 1,
+      "tenRole": "Admin",
+      "them": true,
+      "sua": true,
+      "xoa": true,
+      "duyet": true,
+      "xem": true,
+      "tu_choi": true,
+      "nop": false,
+      "idChucNang": 1,
+      "idUser": 1
+    },
+    {
+      "id": 2,
+      "tenRole": "Giảng viên",
+      "them": true,
+      "sua": true,
+      "xoa": false,
+      "duyet": false,
+      "xem": true,
+      "tu_choi": false,
+      "nop": false,
+      "idChucNang": 2,
+      "idUser": 2
+    },
+    {
+      "id": 3,
+      "tenRole": "Sinh viên",
+      "them": false,
+      "sua": false,
+      "xoa": false,
+      "duyet": false,
+      "xem": true,
+      "tu_choi": false,
+      "nop": true,
+      "idChucNang": 3,
+      "idUser": 3
+    }
+  ],
+  "ChucNang": [
+    {
+      "id": 1,
+      "name": "Quản lý hệ thống",
+      "code": "admin_panel"
+    },
+    {
+      "id": 2,
+      "name": "Quản lý môn học",
+      "code": "subject_management"
+    },
+    {
+      "id": 3,
+      "name": "Xem điểm",
+      "code": "view_scores"
+    }
+  ]
+}
