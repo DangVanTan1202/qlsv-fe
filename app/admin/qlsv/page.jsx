@@ -122,7 +122,7 @@ export default function StudentManagement() {
           <h1 className="text-3xl font-extrabold text-orange-500 text-left mb-6">Quản Lý Sinh Viên</h1>
           <button
             className="bg-pink-600 text-white px-5 py-3 rounded mb-6 w-fit"
-            onClick={() => setNewStudent({ maSinhVien: "", ngaySinh: "", idLopHoc: "", user_id: availableUsers.length > 0 ? availableUsers[0].id : "" })}
+            onClick={() => setNewStudent({ maSinhVien: "", ngaySinh: "", id_LopHoc: "", user_id: availableUsers.length > 0 ? availableUsers[0].id : "" })}
           >
             + Thêm Sinh Viên
           </button>
@@ -141,7 +141,7 @@ export default function StudentManagement() {
                 <tr key={student.id} className="border-t">
                   <td className="p-4">{student.maSinhVien}</td>
                   <td className="p-4">{student.ngaySinh}</td>
-                  <td className="p-4">{classes.find((c) => c.id === student.idLopHoc)?.tenLop || "Chưa có"}</td>
+                  <td className="p-4">{classes.find((c) => c.id === student.id_LopHoc)?.tenLop || "Chưa có"}</td>
                   <td className="p-4">{users.find((u) => u.id === student.user_id)?.hoTen || "Chưa có"}</td>
                   <td className="p-4 flex gap-2">
                     <button className="bg-cyan-400 text-white px-3 py-1 rounded" onClick={() => handleEdit(student)}>Sửa</button>
@@ -162,7 +162,7 @@ export default function StudentManagement() {
               <label className="block text-gray-600 font-semibold">Ngày Sinh:</label>
               <input type="date" className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.ngaySinh || newStudent?.ngaySinh} onChange={(e) => { const value = e.target.value; editingStudent ? setEditingStudent({ ...editingStudent, ngaySinh: value }) : setNewStudent({ ...newStudent, ngaySinh: value }); }} />
               <label className="block text-gray-600 font-semibold">Lớp Học:</label>
-              <select className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.idLopHoc || newStudent?.idLopHoc} onChange={(e) => { const value = Number(e.target.value); editingStudent ? setEditingStudent({ ...editingStudent, idLopHoc: value }) : setNewStudent({ ...newStudent, idLopHoc: value }); }}>
+              <select className="border p-2 w-full mb-3 rounded shadow-sm" value={editingStudent?.id_LopHoc || newStudent?.id_LopHoc} onChange={(e) => { const value = Number(e.target.value); editingStudent ? setEditingStudent({ ...editingStudent, id_LopHoc: value }) : setNewStudent({ ...newStudent, id_LopHoc: value }); }}>
                 <option value="">-- Chọn lớp --</option>
                 {classes.map((cls) => (<option key={cls.id} value={cls.id}>{cls.tenLop}</option>))}
               </select>

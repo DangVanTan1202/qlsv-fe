@@ -4,15 +4,29 @@
       "id": 1,
       "maSinhVien": "SV001",
       "ngaySinh": "2001-05-21",
-      "idLopHoc": 1,
+      "id_LopHoc": 1,
       "user_id": 3
     },
     {
       "id": 2,
       "maSinhVien": "SV002",
       "ngaySinh": "2002-09-15",
-      "idLopHoc": 2,
+      "id_LopHoc": 2,
       "user_id": 4
+    },
+    {
+      "id": "892d",
+      "maSinhVien": "11",
+      "ngaySinh": "2025-03-20",
+      "id_LopHoc": 2,
+      "user_id": "42f0"
+    },
+    {
+      "id": "22f2",
+      "maSinhVien": "22",
+      "ngaySinh": "2025-03-12",
+      "id_LopHoc": 1,
+      "user_id": "ddbc"
     }
   ],
   "LopHoc": [
@@ -32,15 +46,15 @@
       "id": 1,
       "maMonHoc": "MH001",
       "tenMonHoc": "Lập trình Java",
-      "idGiangVien": 1,
-      "idLopHoc": 1
+      "id_GiangVien": "c080",
+      "id_LopHoc": 1
     },
     {
       "id": 2,
       "maMonHoc": "MH002",
       "tenMonHoc": "Cấu trúc dữ liệu",
-      "idGiangVien": 2,
-      "idLopHoc": 2
+      "id_GiangVien": 2,
+      "id_LopHoc": 2
     }
   ],
   "GiangVien": [
@@ -55,6 +69,24 @@
       "maGiangVien": "GV002",
       "ngaySinh": "1975-07-30",
       "user_id": 6
+    },
+    {
+      "id": "c080",
+      "maGiangVien": "dddd",
+      "ngaySinh": "2025-03-19",
+      "user_id": "8b5d",
+      "id_MonHoc": "1",
+      "id_LopHoc": "2",
+      "idMonHoc": "1",
+      "idLopHoc": "1"
+    },
+    {
+      "id": "7f6c",
+      "maGiangVien": "111",
+      "ngaySinh": "2025-03-20",
+      "user_id": "8616",
+      "id_MonHoc": "2",
+      "id_LopHoc": "1"
     }
   ],
   "User": [
@@ -99,6 +131,34 @@
       "matKhau": "gv789",
       "hoTen": "Phạm Thị C",
       "LoaiTk_Id": 2
+    },
+    {
+      "id": "8b5d",
+      "tenTaiKhoan": "ls",
+      "matKhau": "ls",
+      "hoTen": "ls",
+      "LoaiTk_Id": 2
+    },
+    {
+      "id": "8616",
+      "tenTaiKhoan": "zz",
+      "matKhau": "zz",
+      "hoTen": "zz",
+      "LoaiTk_Id": 2
+    },
+    {
+      "id": "42f0",
+      "tenTaiKhoan": "ss",
+      "matKhau": "ss",
+      "hoTen": "ss",
+      "LoaiTk_Id": 3
+    },
+    {
+      "id": "ddbc",
+      "tenTaiKhoan": "yy",
+      "matKhau": "yy",
+      "hoTen": "yy",
+      "LoaiTk_Id": 3
     }
   ],
   "LoaiTk": [
@@ -174,6 +234,43 @@
       "id": 3,
       "name": "Xem điểm",
       "code": "view_scores"
+    }
+  ],
+  "DiemSo": [
+    {
+      "id": 1,
+      "id_SinhVien": 1,
+      "id_MonHoc": 1,
+      "diem": 10,
+      "id_GiangVien": 1
+    },
+    {
+      "id": 2,
+      "id_SinhVien": 2,
+      "id_MonHoc": 2,
+      "diem": 10,
+      "id_GiangVien": 2
+    },
+    {
+      "id": "8899",
+      "id_SinhVien": 1,
+      "id_MonHoc": 1,
+      "diem": 10,
+      "id_GiangVien": 1
+    },
+    {
+      "id": "fac7",
+      "id_SinhVien": 2,
+      "id_MonHoc": null,
+      "diem": 0,
+      "id_GiangVien": null
+    },
+    {
+      "id": "b9e5",
+      "id_SinhVien": "892d",
+      "id_MonHoc": null,
+      "diem": 0,
+      "id_GiangVien": null
     }
   ]
 }

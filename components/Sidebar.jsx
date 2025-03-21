@@ -29,7 +29,7 @@ export default function Sidebar({ user }) {
       items.push({ name: "Lịch học", icon: <Users />, path: "/student/schedule" });
     } else if (user.loaiTK === "giangvien") {
       items.push({ name: "Danh sách lớp học", icon: <Users />, path: "/teacher/classes" });
-      items.push({ name: "Chấm điểm sinh viên", icon: <BarChart2 />, path: "/teacher/grades" });
+      items.push({ name: "Chấm điểm sinh viên", icon: <BarChart2 />, path: "/teacher/diem" });
       items.push({ name: "Lịch giảng dạy", icon: <Book />, path: "/teacher/schedule" });
     } else if (user.loaiTK === "admin") {
       items.push({ name: "Quản lý tài khoản", icon: <Users />, path: "/admin/accounts" });

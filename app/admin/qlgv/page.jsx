@@ -55,7 +55,6 @@ export default function TeacherManagement() {
         console.log("User Data:", data);
         setUsers(data);
       });
-  
 
     fetch("http://localhost:3001/MonHoc")
       .then((res) => res.json())
@@ -66,10 +65,10 @@ export default function TeacherManagement() {
 
     fetch("http://localhost:3001/LopHoc")
       .then((res) => res.json())
-       .then((data) => {
-      console.log("Classes Data:", data); // Kiểm tra dữ liệu
-      setClasses(data);
-    });
+      .then((data) => {
+        console.log("Classes Data:", data); // Kiểm tra dữ liệu
+        setClasses(data);
+      });
   }, [router]);
 
   const availableUsers = users.filter(
@@ -136,8 +135,8 @@ export default function TeacherManagement() {
                   maGiangVien: "",
                   ngaySinh: "",
                   user_id: "",
-                  idMonHoc: "",
-                  idLopHoc: "",
+                  id_MonHoc: "",
+                  id_LopHoc: "",
                 })
               }
             >
@@ -155,161 +154,234 @@ export default function TeacherManagement() {
                 </tr>
               </thead>
               <tbody>
-  {teachers.length > 0 ? (
-    teachers.map((teacher) => {
-      // Kiểm tra nếu dữ liệu chưa có thì không hiển thị lỗi
-      if (!users.length || !subjects.length || !classes.length) {
-        return null;
-      }
+                {teachers.length > 0 ? (
+                  teachers.map((teacher) => {
+                    // Kiểm tra nếu dữ liệu chưa có thì không hiển thị lỗi
+                    if (!users.length || !subjects.length || !classes.length) {
+                      return null;
+                    }
 
-      // Tìm tài khoản theo ID
-      const user = users.find((u) => u.id == teacher.user_id);
-      const userName = user ? user.hoTen : "Chưa có";
+                    // Tìm tài khoản theo ID
+                    const user = users.find((u) => u.id == teacher.user_id);
+                    const userName = user ? user.hoTen : "Chưa có";
 
-      // Tìm môn học theo ID
-      const subject = subjects.find((s) => s.id == teacher.idMonHoc);
-      const subjectName = subject ? subject.tenMonHoc : "Chưa có";
+                    // Tìm môn học theo ID
+                    //const subject = subjects.find((s) => s.id === teacher.idMonHoc);
+                    const subject = subjects.find(
+                      (s) => s.id == Number(teacher.id_MonHoc)
+                    );
+                    const subjectName = subject ? subject.tenMonHoc : "Chưa có";
 
-      // Tìm lớp học theo ID
-      const classItem = classes.find((c) => c.id == teacher.idLopHoc);
-      const className = classItem ? classItem.tenLop : "Chưa có";
+                    // Tìm lớp học theo ID
+                    //const classItem = classes.find((c) => c.id === teacher.idLopHoc);
+                    const classItem = classes.find(
+                      (c) => c.id == Number(teacher.id_LopHoc)
+                    );
+                    const className = classItem ? classItem.tenLop : "Chưa có";
 
-      return (
-        <tr key={teacher.id} className="border-t">
-          <td className="p-4">{teacher.maGiangVien}</td>
-          <td className="p-4">{teacher.ngaySinh || "Chưa có"}</td>
-          <td className="p-4">{userName}</td>
-          <td className="p-4">{subjectName}</td>
-          <td className="p-4">{className}</td>
-          <td className="p-4 flex gap-2">
-            <button className="bg-cyan-400 text-white px-3 py-1 rounded" onClick={() => handleEdit(teacher)}>
-              Sửa
-            </button>
-            <button className="bg-orange-500 text-white px-3 py-1 rounded" onClick={() => handleDelete(teacher.id)}>
-              Xóa
-            </button>
-          </td>
-        </tr>
-      );
-    })
-  ) : (
-    <tr>
-      <td colSpan="6" className="text-center py-4 text-gray-500">
-        Không có dữ liệu giảng viên
-      </td>
-    </tr>
-  )}
-</tbody>
-
+                    return (
+                      <tr key={teacher.id} className="border-t">
+                        <td className="p-4">{teacher.maGiangVien}</td>
+                        <td className="p-4">{teacher.ngaySinh || "Chưa có"}</td>
+                        <td className="p-4">{userName}</td>
+                        <td className="p-4">{subjectName}</td>
+                        <td className="p-4">{className}</td>
+                        <td className="p-4 flex gap-2">
+                          <button
+                            className="bg-cyan-400 text-white px-3 py-1 rounded"
+                            onClick={() => handleEdit(teacher)}
+                          >
+                            Sửa
+                          </button>
+                          <button
+                            className="bg-orange-500 text-white px-3 py-1 rounded"
+                            onClick={() => handleDelete(teacher.id)}
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-4 text-gray-500">
+                      Không có dữ liệu giảng viên
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
             {(editingTeacher || newTeacher) && (
-  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-white p-10 rounded-lg shadow-xl w-80 border border-gray-300">
-    <h2 className="text-2xl font-bold text-gray-700 mb-4">
-      {editingTeacher ? "Chỉnh sửa Giảng Viên" : "Thêm mới Giảng Viên"}
-    </h2>
-    <button
-      className="text-red-600 text-4xl font-bold hover:text-red-800 absolute top-2 right-4"
-      onClick={() => {
-        setEditingTeacher(null);
-        setNewTeacher(null);
-      }}
-    >
-      ×
-    </button>
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-white p-10 rounded-lg shadow-xl w-[40rem] border border-gray-300">
+                <h2 className="text-2xl font-bold text-gray-700 mb-4 text-center">
+                  {editingTeacher
+                    ? "Chỉnh sửa Giảng Viên"
+                    : "Thêm mới Giảng Viên"}
+                </h2>
+                <button
+                  className="text-red-600 text-4xl font-bold hover:text-red-800 absolute top-2 right-4"
+                  onClick={() => {
+                    setEditingTeacher(null);
+                    setNewTeacher(null);
+                  }}
+                >
+                  ×
+                </button>
 
-    {/* Mã Giảng Viên */}
-    <label className="block font-semibold mb-2">Mã Giảng Viên</label>
-    <input
-      type="text"
-      className="w-full p-2 border rounded mb-4"
-      value={editingTeacher?.maGiangVien || newTeacher?.maGiangVien || ""}
-      onChange={(e) =>
-        (editingTeacher
-          ? setEditingTeacher({ ...editingTeacher, maGiangVien: e.target.value })
-          : setNewTeacher({ ...newTeacher, maGiangVien: e.target.value }))
-      }
-    />
+                {/* Form */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Mã Giảng Viên */}
+                  <div>
+                    <label className="block font-semibold mb-2">
+                      Mã Giảng Viên
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded"
+                      value={
+                        editingTeacher?.maGiangVien ||
+                        newTeacher?.maGiangVien ||
+                        ""
+                      }
+                      onChange={(e) =>
+                        editingTeacher
+                          ? setEditingTeacher({
+                              ...editingTeacher,
+                              maGiangVien: e.target.value,
+                            })
+                          : setNewTeacher({
+                              ...newTeacher,
+                              maGiangVien: e.target.value,
+                            })
+                      }
+                    />
+                  </div>
 
-    {/* Ngày Sinh */}
-    <label className="block font-semibold mb-2">Ngày Sinh</label>
-    <input
-      type="date"
-      className="w-full p-2 border rounded mb-4"
-      value={editingTeacher?.ngaySinh || newTeacher?.ngaySinh || ""}
-      onChange={(e) =>
-        (editingTeacher
-          ? setEditingTeacher({ ...editingTeacher, ngaySinh: e.target.value })
-          : setNewTeacher({ ...newTeacher, ngaySinh: e.target.value }))
-      }
-    />
+                  {/* Ngày Sinh */}
+                  <div>
+                    <label className="block font-semibold mb-2">
+                      Ngày Sinh
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full p-2 border rounded"
+                      value={
+                        editingTeacher?.ngaySinh || newTeacher?.ngaySinh || ""
+                      }
+                      onChange={(e) =>
+                        editingTeacher
+                          ? setEditingTeacher({
+                              ...editingTeacher,
+                              ngaySinh: e.target.value,
+                            })
+                          : setNewTeacher({
+                              ...newTeacher,
+                              ngaySinh: e.target.value,
+                            })
+                      }
+                    />
+                  </div>
 
-    {/* Tài Khoản */}
-    <label className="block font-semibold mb-2">Tài Khoản</label>
-    <select
-      className="w-full p-2 border rounded mb-4"
-      value={editingTeacher?.user_id || newTeacher?.user_id || ""}
-      onChange={(e) =>
-        (editingTeacher
-          ? setEditingTeacher({ ...editingTeacher, user_id: e.target.value })
-          : setNewTeacher({ ...newTeacher, user_id: e.target.value }))
-      }
-    >
-      <option value="">Chọn tài khoản</option>
-      {availableUsers.map((user) => (
-        <option key={user.id} value={user.id}>
-          {user.hoTen} ({user.email})
-        </option>
-      ))}
-    </select>
+                  {/* Tài Khoản */}
+                  <div>
+                    <label className="block font-semibold mb-2">
+                      Tài Khoản
+                    </label>
+                    <select
+                      className="w-full p-2 border rounded"
+                      value={
+                        editingTeacher?.user_id || newTeacher?.user_id || ""
+                      }
+                      onChange={(e) =>
+                        editingTeacher
+                          ? setEditingTeacher({
+                              ...editingTeacher,
+                              user_id: e.target.value,
+                            })
+                          : setNewTeacher({
+                              ...newTeacher,
+                              user_id: e.target.value,
+                            })
+                      }
+                    >
+                      <option value="">Chọn tài khoản</option>
+                      {availableUsers.map((user) => (
+                        <option key={user.id} value={user.id}>
+                          {user.hoTen} ({user.email})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-    {/* Môn Học */}
-    <label className="block font-semibold mb-2">Môn Học</label>
-    <select
-      className="w-full p-2 border rounded mb-4"
-      value={editingTeacher?.idMonHoc || newTeacher?.idMonHoc || ""}
-      onChange={(e) =>
-        (editingTeacher
-          ? setEditingTeacher({ ...editingTeacher, idMonHoc: e.target.value })
-          : setNewTeacher({ ...newTeacher, idMonHoc: e.target.value }))
-      }
-    >
-      <option value="">Chọn môn học</option>
-      {subjects.map((subject) => (
-        <option key={subject.id} value={subject.id}>
-          {subject.tenMonHoc}
-        </option>
-      ))}
-    </select>
+                  {/* Môn Học */}
+                  <div>
+                    <label className="block font-semibold mb-2">Môn Học</label>
+                    <select
+                      className="w-full p-2 border rounded"
+                      value={
+                        editingTeacher?.id_MonHoc || newTeacher?.id_MonHoc || ""
+                      }
+                      onChange={(e) =>
+                        editingTeacher
+                          ? setEditingTeacher({
+                              ...editingTeacher,
+                              id_MonHoc: e.target.value,
+                            })
+                          : setNewTeacher({
+                              ...newTeacher,
+                              id_MonHoc: e.target.value,
+                            })
+                      }
+                    >
+                      <option value="">Chọn môn học</option>
+                      {subjects.map((subject) => (
+                        <option key={subject.id} value={subject.id}>
+                          {subject.tenMonHoc}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-    {/* Lớp Học */}
-    <label className="block font-semibold mb-2">Lớp Học</label>
-    <select
-      className="w-full p-2 border rounded mb-4"
-      value={editingTeacher?.idLopHoc || newTeacher?.idLopHoc || ""}
-      onChange={(e) =>
-        (editingTeacher
-          ? setEditingTeacher({ ...editingTeacher, idLopHoc: e.target.value })
-          : setNewTeacher({ ...newTeacher, idLopHoc: e.target.value }))
-      }
-    >
-      <option value="">Chọn lớp học</option>
-      {classes.map((classItem) => (
-        <option key={classItem.id} value={classItem.id}>
-          {classItem.tenLop}
-        </option>
-      ))}
-    </select>
+                  {/* Lớp Học */}
+                  <div className="col-span-2">
+                    <label className="block font-semibold mb-2">Lớp Học</label>
+                    <select
+                      className="w-full p-2 border rounded"
+                      value={
+                        editingTeacher?.idLopHoc || newTeacher?.idLopHoc || ""
+                      }
+                      onChange={(e) =>
+                        editingTeacher
+                          ? setEditingTeacher({
+                              ...editingTeacher,
+                              id_LopHoc: e.target.value,
+                            })
+                          : setNewTeacher({
+                              ...newTeacher,
+                              id_LopHoc: e.target.value,
+                            })
+                      }
+                    >
+                      <option value="">Chọn lớp học</option>
+                      {classes.map((classItem) => (
+                        <option key={classItem.id} value={classItem.id}>
+                          {classItem.tenLop}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-    {/* Nút Lưu */}
-    <button
-      className="bg-rose-500 text-white px-6 py-3 w-full rounded-lg font-semibold shadow-md hover:bg-rose-600 transition"
-      onClick={handleSave}
-    >
-      Lưu
-    </button>
-  </div>
-)}
-
+                {/* Nút Lưu */}
+                <button
+                  className="bg-rose-500 text-white px-6 py-3 w-full rounded-lg font-semibold shadow-md hover:bg-rose-600 transition mt-6"
+                  onClick={handleSave}
+                >
+                  Lưu
+                </button>
+              </div>
+            )}
           </section>
         </main>
       </div>
