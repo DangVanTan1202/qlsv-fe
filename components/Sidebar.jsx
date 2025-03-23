@@ -33,7 +33,7 @@ export default function Sidebar({ user }) {
       items.push({ name: "Lịch giảng dạy", icon: <Book />, path: "/teacher/schedule" });
     } else if (user.loaiTK === "admin") {
       items.push({ name: "Quản lý tài khoản", icon: <Users />, path: "/admin/accounts" });
-      items.push({ name: "Phê duyệt điểm", icon: <BarChart2 />, path: "/admin/approval" });
+      items.push({ name: "Phê duyệt điểm", icon: <BarChart2 />, path: "/admin/duyet" });
       items.push({ name: "quản lý quyền", icon: <BarChart2 />, path: "/admin/quyen" });
       items.push({ name: "quản lý sinh viên", icon: <BarChart2 />, path: "/admin/qlsv" });
       items.push({ name: "quản lý giảng viên", icon: <BarChart2 />, path: "/admin/qlgv" });

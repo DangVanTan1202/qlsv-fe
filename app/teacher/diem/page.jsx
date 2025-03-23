@@ -11,7 +11,8 @@ export default function NhapDiem() {
   const [selectedMonHoc, setSelectedMonHoc] = useState("");
   const [selectedLopHoc, setSelectedLopHoc] = useState("");
   const [userGiangVien, setUserGiangVien] = useState(null);
-  const [giangVienId, setGiangVienId] = useState(null); // Lưu id giảng viên thật
+  const [giangVienId, setGiangVienId] = useState(null);
+  const [daNopDiem, setDaNopDiem] = useState(false);
 
   // Lấy user đang đăng nhập từ localStorage hoặc API
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function NhapDiem() {
           } else {
             console.warn("Không tìm thấy giảng viên với user_id:", userGiangVien);
           }
-        })
+        })        
         .catch((error) => console.error("Lỗi fetch GiangVien:", error));
     }
   }, [userGiangVien]);
@@ -83,18 +84,55 @@ export default function NhapDiem() {
     }
   }, [selectedLopHoc]);
 
+  useEffect(() => {
+    if (selectedLopHoc && selectedMonHoc) {
+      fetch("http://localhost:3001/DiemSo")
+        .then((res) => res.json())
+        .then((data) => {
+          const existingDiem = data.some(
+            (d) =>
+              d.id_LopHoc === parseInt(selectedLopHoc) &&
+              d.id_MonHoc === parseInt(selectedMonHoc) &&
+              d.id_GiangVien === giangVienId &&
+              d.trangThai === "pending"
+          );
+          setDaNopDiem(existingDiem); //  Cập nhật state
+        });
+    }
+  }, [selectedLopHoc, selectedMonHoc, giangVienId]);
+  
   const handleDiemChange = (sinhVienId, value) => {
-    setDiemSo({ ...diemSo, [sinhVienId]: value });
+    setDiemSo((prevDiemSo) => ({
+      ...prevDiemSo,
+      [sinhVienId]: value,
+    }));
   };
-
+  
   const handleSubmit = async () => {
+    if (!selectedLopHoc || !selectedMonHoc) {
+      alert("Vui lòng chọn lớp học và môn học!");
+      return;
+    }
+  
+    if (daNopDiem) {
+      alert("Bạn đã nộp điểm cho lớp học và môn học này. Vui lòng chờ duyệt!");
+      return;
+    }
+  
+    if (sinhViens.length === 0) {
+      alert("Không có sinh viên nào trong lớp này để nhập điểm!");
+      return;
+    }
+  
     const diemData = sinhViens.map((sv) => ({
       id_SinhVien: sv.id,
       id_MonHoc: parseInt(selectedMonHoc),
       diem: parseFloat(diemSo[sv.id]) || 0,
       id_GiangVien: giangVienId,
+      id_LopHoc: parseInt(selectedLopHoc),
+      trangThai: "pending",
     }));
-
+  
     await Promise.all(
       diemData.map((diem) =>
         fetch("http://localhost:3001/DiemSo", {
@@ -104,10 +142,11 @@ export default function NhapDiem() {
         })
       )
     );
-
+  
     alert("Nộp điểm thành công!");
+    setDaNopDiem(true); // Sau khi nộp điểm, cập nhật trạng thái
   };
-
+  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-4">Nhập điểm</h2>
@@ -131,61 +170,69 @@ export default function NhapDiem() {
       </select>
 
       <label className="block mb-2">Chọn Lớp Học:</label>
-      <select
-        className="w-full p-2 border rounded-md mb-4"
-        onChange={(e) => setSelectedLopHoc(e.target.value)}
-        value={selectedLopHoc}
-      >
-        <option value="">-- Chọn lớp học --</option>
-        {lopHocs.map((lop) => (
-          <option key={lop.id} value={lop.id}>
-            {lop.tenLop}
-          </option>
-        ))}
-      </select>
+<select
+  className="w-full p-2 border rounded-md mb-4"
+  onChange={(e) => setSelectedLopHoc(e.target.value)}
+  value={selectedLopHoc}
+>
+  <option value="">-- Chọn lớp học --</option>
+  {lopHocs
+    .filter((lop) => monHocs.some((mon) => mon.id_LopHoc === lop.id)) // Lọc lớp học mà giảng viên dạy
+    .map((lop) => (
+      <option key={lop.id} value={lop.id}>
+        {lop.tenLop}
+      </option>
+    ))}
+</select>
+{!daNopDiem && sinhViens.length > 0 && (
+  <>
+    <table className="w-full border-collapse border mt-4">
+      <thead>
+        <tr className="bg-gray-200">
+          <th className="border p-2">Mã SV</th>
+          <th className="border p-2">Họ Tên</th>
+          <th className="border p-2">Điểm</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sinhViens.map((sv) => {
+          const user = users.find((u) => u.id === sv.user_id);
+          return (
+            <tr key={sv.id}>
+              <td className="border p-2">{sv.maSinhVien}</td>
+              <td className="border p-2">{user ? user.hoTen : "N/A"}</td>
+              <td className="border p-2">
+                <input
+                  type="number"
+                  className="w-full p-2 border rounded-md"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  value={diemSo[sv.id] || ""}
+                  onChange={(e) => handleDiemChange(sv.id, e.target.value)}
+                />
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
 
-      {sinhViens.length > 0 && (
-        <>
-          <table className="w-full border-collapse border mt-4">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border p-2">Mã SV</th>
-                <th className="border p-2">Họ Tên</th>
-                <th className="border p-2">Điểm</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sinhViens.map((sv) => {
-                const user = users.find((u) => u.id === sv.user_id);
-                return (
-                  <tr key={sv.id}>
-                    <td className="border p-2">{sv.maSinhVien}</td>
-                    <td className="border p-2">{user ? user.hoTen : "N/A"}</td>
-                    <td className="border p-2">
-                      <input
-                        type="number"
-                        className="w-full p-2 border rounded-md"
-                        min="0"
-                        max="10"
-                        step="0.1"
-                        value={diemSo[sv.id] || ""}
-                        onChange={(e) => handleDiemChange(sv.id, e.target.value)}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+    <button
+      className="w-full bg-blue-500 text-white p-3 mt-4 rounded-md hover:bg-blue-600"
+      onClick={handleSubmit}
+    >
+      Nộp Điểm
+    </button>
+  </>
+)}
 
-          <button
-            className="w-full bg-blue-500 text-white p-3 mt-4 rounded-md hover:bg-blue-600"
-            onClick={handleSubmit}
-          >
-            Nộp Điểm
-          </button>
-        </>
-      )}
+{daNopDiem && (
+  <p className="text-red-500 font-bold mt-4">
+    Bạn đã nộp điểm cho lớp học và môn học này. Vui lòng chờ duyệt!
+  </p>
+)}
+
     </div>
   );
 }
