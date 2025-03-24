@@ -13,7 +13,7 @@ export default function NhapDiem() {
   const [userGiangVien, setUserGiangVien] = useState(null);
   const [giangVienId, setGiangVienId] = useState(null);
   const [daNopDiem, setDaNopDiem] = useState(false);
-
+  const [thongBao, setThongBao] = useState("");
   // Lấy user đang đăng nhập từ localStorage hoặc API
   useEffect(() => {
     console.log("User đăng nhập từ localStorage:", localStorage.getItem("user"));
@@ -101,6 +101,34 @@ export default function NhapDiem() {
     }
   }, [selectedLopHoc, selectedMonHoc, giangVienId]);
   
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (selectedLopHoc && selectedMonHoc && giangVienId) {
+        fetch("http://localhost:3001/DiemSo")
+          .then((res) => res.json())
+          .then((data) => {
+            const existingDiem = data.some(
+              (d) =>
+                d.id_LopHoc === parseInt(selectedLopHoc) &&
+                d.id_MonHoc === parseInt(selectedMonHoc) &&
+                d.id_GiangVien === giangVienId &&
+                d.trangThai === "pending"
+            );
+  
+            if (!existingDiem && daNopDiem) {
+              // ✅ Nếu điểm đã từng nộp nhưng bị xóa, hiển thị thông báo
+              setThongBao("Điểm của bạn đã bị từ chối. Vui lòng nhập lại!");
+              setDaNopDiem(false);
+            }
+          });
+      }
+    }, 5000); // Kiểm tra mỗi 5 giây
+  
+    return () => clearInterval(interval);
+  }, [selectedLopHoc, selectedMonHoc, giangVienId, daNopDiem, setThongBao]); // ✅ Đưa setThongBao vào dependency
+  
+
   const handleDiemChange = (sinhVienId, value) => {
     setDiemSo((prevDiemSo) => ({
       ...prevDiemSo,
@@ -124,28 +152,62 @@ export default function NhapDiem() {
       return;
     }
   
-    const diemData = sinhViens.map((sv) => ({
-      id_SinhVien: sv.id,
-      id_MonHoc: parseInt(selectedMonHoc),
-      diem: parseFloat(diemSo[sv.id]) || 0,
-      id_GiangVien: giangVienId,
-      id_LopHoc: parseInt(selectedLopHoc),
-      trangThai: "pending",
-    }));
+    // Lấy danh sách điểm bị từ chối (trangThai === "rejected")
+    const res = await fetch("http://localhost:3001/DiemSo");
+    const data = await res.json();
   
-    await Promise.all(
-      diemData.map((diem) =>
-        fetch("http://localhost:3001/DiemSo", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(diem),
-        })
-      )
+    const rejectedDiem = data.filter(
+      (d) =>
+        d.id_LopHoc === parseInt(selectedLopHoc) &&
+        d.id_MonHoc === parseInt(selectedMonHoc) &&
+        d.id_GiangVien === giangVienId &&
+        d.trangThai === "rejected"
     );
   
-    alert("Nộp điểm thành công!");
-    setDaNopDiem(true); // Sau khi nộp điểm, cập nhật trạng thái
+    if (rejectedDiem.length > 0) {
+      // Nếu có điểm bị từ chối, cập nhật lại trạng thái
+      await Promise.all(
+        rejectedDiem.map((diem) =>
+          fetch(`http://localhost:3001/DiemSo/${diem.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              diem: parseFloat(diemSo[diem.id_SinhVien]) || diem.diem, // Giữ nguyên điểm cũ nếu không nhập mới
+              trangThai: "pending",
+            }),
+          })
+        )
+      );
+  
+      alert("Điểm đã được cập nhật lại!");
+    } else {
+      // Nếu chưa có điểm bị từ chối, tạo mới như bình thường
+      const diemData = sinhViens.map((sv) => ({
+        id_SinhVien: sv.id,
+        id_MonHoc: parseInt(selectedMonHoc),
+        diem: parseFloat(diemSo[sv.id]) || 0,
+        id_GiangVien: giangVienId,
+        id_LopHoc: parseInt(selectedLopHoc),
+        trangThai: "pending",
+      }));
+  
+      await Promise.all(
+        diemData.map((diem) =>
+          fetch("http://localhost:3001/DiemSo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(diem),
+          })
+        )
+      );
+  
+      alert("Nộp điểm thành công!");
+    }
+  
+    setDaNopDiem(true);
   };
+  
+  
   
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">

@@ -24,13 +24,13 @@ export default function Sidebar({ user }) {
     if (!user) return items;
 
     if (user.loaiTK === "sinhvien") {
-      items.push({ name: "Môn học đã đăng ký", icon: <Book />, path: "/student/courses" });
-      items.push({ name: "Điểm số cá nhân", icon: <BarChart2 />, path: "/student/grades" });
-      items.push({ name: "Lịch học", icon: <Users />, path: "/student/schedule" });
+      items.push({ name: "Môn học đã đăng ký", icon: <Book />, path: "/student/monhoc" });
+      items.push({ name: "Điểm số cá nhân", icon: <BarChart2 />, path: "/student/xemdiem" });
+      items.push({ name: "Lịch học", icon: <Users />, path: "/student/lich" });
     } else if (user.loaiTK === "giangvien") {
-      items.push({ name: "Danh sách lớp học", icon: <Users />, path: "/teacher/classes" });
+      items.push({ name: "Quản lý học sinh", icon: <Users />, path: "/teacher/qlhs" });
       items.push({ name: "Chấm điểm sinh viên", icon: <BarChart2 />, path: "/teacher/diem" });
-      items.push({ name: "Lịch giảng dạy", icon: <Book />, path: "/teacher/schedule" });
+      items.push({ name: "Thông báo", icon: <Book />, path: "/teacher/thongbao" });
     } else if (user.loaiTK === "admin") {
       items.push({ name: "Quản lý tài khoản", icon: <Users />, path: "/admin/accounts" });
       items.push({ name: "Phê duyệt điểm", icon: <BarChart2 />, path: "/admin/duyet" });

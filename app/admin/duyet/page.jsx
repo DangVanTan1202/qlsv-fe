@@ -15,7 +15,7 @@ export default function DuyetDiem() {
         setDiemSo(pendingDiem);
       })
       .catch((error) => console.error("Lỗi lấy danh sách điểm:", error));
-  
+
     fetch("http://localhost:3001/LopHoc")
       .then((res) => res.json())
       .then((data) => {
@@ -24,7 +24,7 @@ export default function DuyetDiem() {
       })
       .catch((error) => console.error("Lỗi lấy danh sách lớp học:", error));
   }, []);
-  
+
   // Lấy danh sách lớp học có điểm chờ duyệt
   const lopCoDiem = lopHocs.filter((lop) =>
     diemSo.some((diem) => diem.id_LopHoc === lop.id)
@@ -53,6 +53,7 @@ export default function DuyetDiem() {
     await Promise.all(
       diemTrongLop.map((diem) =>
         fetch(`http://localhost:3001/DiemSo/${diem.id}`, {
+          method: "DELETE",
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ trangThai: "rejected" }),
